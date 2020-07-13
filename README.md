@@ -134,7 +134,17 @@ std::string strKey = "hello";
 
 //..... get the pContext ;
 
-auto value = tc_redis::redis_context(pContext).string().GET(strKey);
+std::string strValue;
 
-printf("the key(%s) value is %s \n",strKey.c_str(),*value.c_str());
+try
+{
+    auto value = tc_redis::redis_context(pContext).string().GET(strKey);
+    strValue = *value;
+}
+catch (tc_redis::redis_error e)
+{
+    printf("redis error! code: %d, describe: %s\ncmd: %s", *(int *)&(e.code), e.describe.c_str(), e.cmd.c_str());
+}
+
+printf("the key(%s) value is %s \n",strKey.c_str(),strValue.c_str());
 ~~~
